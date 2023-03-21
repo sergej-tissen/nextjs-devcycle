@@ -1,14 +1,14 @@
-import { DVCClient, initialize } from "@devcycle/nodejs-server-sdk";
+import { DVCClient, initialize } from '@devcycle/nodejs-server-sdk'
 
-const sdk = process.env.DEVCYCLE_TOKEN as string;
+const sdkKey = process.env.DEVCYCLE_CLIENT_SDK_KEY as string
 
-const globalForDevCycle = global as unknown as { devCycle: DVCClient };
+let dvcClient: DVCClient
 
 const getDVCClient = async () => {
-  if (typeof globalForDevCycle.devCycle === "undefined") {
-    globalForDevCycle.devCycle = await initialize(sdk).onClientInitialized();
+  if (!dvcClient) {
+    dvcClient = await initialize(sdkKey).onClientInitialized()
   }
-  return globalForDevCycle.devCycle;
-};
+  return dvcClient
+}
 
-export default getDVCClient;
+export default getDVCClient
