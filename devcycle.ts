@@ -1,6 +1,6 @@
 import { DVCClient, initialize } from '@devcycle/nodejs-server-sdk'
 
-const sdkKey = process.env.DEVCYCLE_CLIENT_SDK_KEY as string
+const sdkKey = process.env.DEVCYCLE_SERVER_SDK_KEY as string
 
 let dvcClient: DVCClient
 
