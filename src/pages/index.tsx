@@ -2,10 +2,13 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
+import { DVCVariable, initialize } from '@devcycle/nodejs-server-sdk'
 
 const inter = Inter({ subsets: ['latin'] })
 
-export default function Home() {
+export default function Home(props: {
+  variables?: Record<string, DVCVariable>
+}) {
   return (
     <>
       <Head>
@@ -16,6 +19,7 @@ export default function Home() {
       </Head>
       <main className={styles.main}>
         <div className={styles.description}>
+          <h1>Hey {props.variables?.nik?.value ? "enabled" : "disabled"}</h1>
           <p>
             Get started by editing&nbsp;
             <code className={styles.code}>src/pages/index.tsx</code>
@@ -120,4 +124,19 @@ export default function Home() {
       </main>
     </>
   )
+}
+
+export async function getServerSideProps(context: any) {
+  const sdk = process.env.DEVCYCLE_TOKEN as string
+  const user = { user_id: "my_user" }
+
+  const dvcClient = await initialize(sdk, {
+    enableCloudBucketing: true,
+  })
+
+  const variables = await dvcClient.allVariables(user);
+
+  return {
+    props: { variables },
+  }
 }
