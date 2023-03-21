@@ -2,7 +2,8 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
-import { DVCVariable, initialize } from '@devcycle/nodejs-server-sdk'
+import { DVCVariable } from '@devcycle/nodejs-server-sdk'
+import getDVCClient from '../../devcycle'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -127,12 +128,8 @@ export default function Home(props: {
 }
 
 export async function getServerSideProps(context: any) {
-  const sdk = process.env.DEVCYCLE_TOKEN as string
+  const dvcClient = await getDVCClient()
   const user = { user_id: "my_user" }
-
-  const dvcClient = await initialize(sdk, {
-    enableCloudBucketing: true,
-  })
 
   const variables = await dvcClient.allVariables(user);
 
